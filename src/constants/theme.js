@@ -1,0 +1,19 @@
+const COLORS ={
+    gray: "#F3F3F3",
+    white: "#FFFFFF",
+    black: "#000000",
+    bright_red : "#EE4B2B",
+}
+
+const FONT_SIZE = {
+    ssm: 12,
+    sm: 14,
+    md: 16,
+    xmd: 18,
+    xxmd: 20,
+    lg: 22,
+    xl: 32,
+    xxl: 64
+};
+
+export { COLORS, FONT_SIZE};
