@@ -1,9 +1,13 @@
+import { Link } from "react-router-dom";
 import "./navbar.css";
 
 function Navbar(){
     return <nav class="navbar navbar-expand-md navbar-dark bg-dark container" aria-label="Fourth navbar example">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Expand at md</a>
+      <div className="navbar-brand d-flex">
+        <p className="cor-dev">DEV</p>
+        <p className="cor-davoglio">DAVOGLIO</p>
+      </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -28,9 +32,7 @@ function Navbar(){
             </ul>
           </li>
         </ul>
-        <form>
-          <input class="form-control" type="text" placeholder="Search" aria-label="Search" />
-        </form>
+          <Link to="/"/>
       </div>
     </div>
   </nav>
