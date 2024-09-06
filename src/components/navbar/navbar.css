@@ -2,6 +2,15 @@ div-navbar{
     background-color: "#8f8989";
 }
 
+.teste{
+    display: flex;
+    place-items: center;
+}
+
+.nome-dev{
+    padding-right: 0;
+}
+
 .cor-dev{
     color: #000;
 }

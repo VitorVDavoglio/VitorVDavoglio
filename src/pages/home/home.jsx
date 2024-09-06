@@ -8,8 +8,9 @@ function Home(){
 
         <Navbar /> 
 
-        <div className="container-fluid">
-            <h1>Página Home</h1>
+        <div className="container">
+            <br/>
+            <h3>Linguagens que utilizo</h3>
             
             <div>
                 <Link to="/projetos"> Entrar página Projetos</Link>
