@@ -1,32 +1,83 @@
-import { useState } from "react";
 import "./login.css";
-import { Link } from "react-router-dom";
+import Navbar from "../../components/navbar/navbar.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import apiWeb from "../../services/apiWeb.js";
 
 function Login(){
 
-    const [email, setEmail] = useState("");
+    const navigate = useNavigate();
+    const username = '';
+    const password = '';
+    const credentials = btoa(`${username}:${password}`);
+
+    const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
+    const [resultado, setResultado] =useState([]);
+
+    function SalvarNome(e){
+        setNome(e.target.value);
+    }
+
+    function SalvarSenha(e){
+        setSenha(e.target.value);
+    }
+
+    function VerificarDados(e){
+        e.preventDefault();
+        if(nome && senha){
+            PegarLogin();
+        }else{
+            alert("Falta preencher dados");
+        }
+    }
+
+    async function PegarLogin() {
+        await apiWeb.get(`login/entrar?nome=${nome}&senha=${senha}`,{
+            headers: {
+                'Authorization' : `Basic ${credentials}`,
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+            setResultado(response.data);
+            // if(response.data){
+            //     navigate('/projetos')
+            // }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     return <>
+
+        <Navbar />
+
         <div className="container-fluid">
             <h1>
                 Login
             </h1>
 
             <div className="container">
-
-                <form>
+                <form onSubmit={VerificarDados}>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" />
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        <label className="form-label">Email</label>
+                        <input type="text" className="form-control" onChange={SalvarNome} value={nome}/>
                     </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Senha</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" />
+                    <div className="mb-3">
+                        <label className="form-label">Senha</label>
+                        <input type="text" className="form-control" onChange={SalvarSenha} value={senha}/>
                     </div>
-                    <button type="submit" class="btn btn-primary" >Submit</button>
+                    <button className="btn btn-primary">Submit</button>
                 </form>
+            </div>
+
+            <div>
+                <p>{resultado.id}</p>
+                <p>{resultado.nome}</p>
+                <p>{resultado.permissao}</p>
             </div>
 
 
