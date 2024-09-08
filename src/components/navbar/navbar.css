@@ -2,7 +2,11 @@ div-navbar{
     background-color: "#8f8989";
 }
 
-.teste{
+.container-fluid{
+    justify-content: space-between;
+}
+
+.li-nomedev{
     display: flex;
     place-items: center;
 }
@@ -13,4 +17,22 @@ div-navbar{
 
 .cor-dev{
     color: #000;
+}
+
+.div-devdavoglio-mobile{
+    display: none;
+}
+
+/* INICIO RESPONSIVIDADE 768px */
+@media (width <= 766px) {
+    .div-devdavoglio-mobile{
+        display: block;
+        display: flex;
+        align-items: center;
+        place-items: center;
+    }
+
+    .li-nomedev{
+        display: none;
+    }
 }

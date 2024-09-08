@@ -1,9 +1,14 @@
 import "./projetos.css";
 import { Link } from "react-router-dom";
 
+import Navbar from "../../components/navbar/navbar.jsx";
+
 function Projetos(){
 
     return <>
+
+        <Navbar />
+
         <div className="container-fluid">
             <h1>
                 Projetos

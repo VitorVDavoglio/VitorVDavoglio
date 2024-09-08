@@ -3,6 +3,7 @@ const COLORS ={
     white: "#FFFFFF",
     black: "#000000",
     bright_red : "#EE4B2B",
+    orange_dev : "#FF7F00",
 }
 
 const FONT_SIZE = {
