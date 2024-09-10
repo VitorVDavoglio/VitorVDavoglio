@@ -17,7 +17,6 @@ app.use(expressBasicAuth({
     }
 }));
 
-
 // Rotas
 app.use(routeLogin);
 app.use(routeAcad);
