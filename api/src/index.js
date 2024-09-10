@@ -3,6 +3,7 @@ import cors from "cors";
 import expressBasicAuth from "express-basic-auth";
 
 import routeLogin from "./routes/route.login.js";
+import routeAcad from "./routes/route.acad.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(expressBasicAuth({
 
 // Rotas
 app.use(routeLogin);
+app.use(routeAcad);
 
 const port = 3002;
 

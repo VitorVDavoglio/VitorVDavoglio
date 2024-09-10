@@ -55,7 +55,7 @@ function Login(){
 
         <Navbar />
 
-        <div className="container-fluid">
+        <div className="container">
             <h1>
                 Login
             </h1>

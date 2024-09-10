@@ -9,7 +9,7 @@ function Projetos(){
 
         <Navbar />
 
-        <div className="container-fluid">
+        <div className="container">
             <h1>
                 Projetos
             </h1>
