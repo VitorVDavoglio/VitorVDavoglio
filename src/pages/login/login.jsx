@@ -4,17 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import apiWeb from "../../services/apiWeb.js";
+import { CONSTANTES_SERVER } from "../../style/const.js";
 
 function Login(){
 
     const navigate = useNavigate();
-    const username = '';
-    const password = '';
+    const username = CONSTANTES_SERVER.credentials_username;
+    const password = CONSTANTES_SERVER.credentials_password;
     const credentials = btoa(`${username}:${password}`);
 
-    const [nome, setNome] = useState("");
-    const [senha, setSenha] = useState("");
-    const [resultado, setResultado] =useState([]);
+    const [nome, setNome] = useState("vitor");
+    const [senha, setSenha] = useState("vitorAdmin013");
+    const [resultado, setResultado] = useState([]);
 
     function SalvarNome(e){
         setNome(e.target.value);
@@ -42,9 +43,9 @@ function Login(){
         .then(response => {
             console.log(response.data);
             setResultado(response.data);
-            // if(response.data){
-            //     navigate('/projetos')
-            // }
+            if(response.data){
+                navigate('/home');
+            }
         })
         .catch(err => {
             console.log(err);

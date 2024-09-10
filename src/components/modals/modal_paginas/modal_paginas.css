@@ -1,0 +1,32 @@
+.react-modal-content-paginas{
+    width: 70%;
+    max-width: 70%;
+    background: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0.24rem;
+    margin-left: 0px;
+    transition: all 2s cubic-bezier(1, 0.885, 0.32, 1.275);
+}
+
+.div-modal-paginas-close{
+    right: 10px;
+    text-align: end;
+    padding: 5px;
+}
+
+.modal-paginas-close{
+    border: 0;
+    background: transparent;
+}
+
+.div-links-tamanho{
+    border-top: 1px solid #d9d9d9;
+    padding: 20px;
+    padding-left: 20px;
+}
+
+.div-links-tamanho p{
+    margin: 0;
+}

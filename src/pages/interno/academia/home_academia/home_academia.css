@@ -1,0 +1,11 @@
+.quadrado-iniciar-treino{
+    display: flex;
+    margin-top: 20px;
+}
+.quadrado-iniciar-treino p{
+    margin: auto;
+}
+
+.div-treino-ativo{
+    margin-top: 50px;
+}
