@@ -17,6 +17,7 @@ function CadastroExerc(props){
     const [idGrupoMuscularEscolhido, setIdGrupoMuscularEscolhido] = useState("");
     const [grupoExercicio, setGrupoExercicio] = useState([]);
     const [idGrupoExercicioEscolhido, setIdGrupoExercicioEscolhido] = useState("");
+    const [mensagemServidor, setMensagemServidor] = useState("");
 
     useEffect(() => {
         if(location.state){
@@ -47,7 +48,6 @@ function CadastroExerc(props){
     async function BuscarGruposExercicio(){
         await apiTeste.get(`/acad/grupoExercicio?key_grupo_muscular=${idGrupoMuscularEscolhido}`)
         .then(resp => {
-            console.log(resp);
             setGrupoExercicio(resp.data);
         })
         .catch(err => {
@@ -59,7 +59,19 @@ function CadastroExerc(props){
         setIdGrupoExercicioEscolhido(evento.target.value);
     }
 
-
+    async function SalvarExercicio(){
+        await apiTeste.get(`/acad/exercicio/criar?key_grupo_exercicio=${idGrupoExercicioEscolhido}&key_treino=${keyTreino}`)
+        .then(resp => {
+            console.log(resp);
+            if(resp.request.status === 200){
+                setMensagemServidor('Exercício criado com sucesso');
+                navigate("/academia/cadastro/exercicio", {state:{key_treino: keyTreino}})
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     return <>
 
@@ -99,9 +111,10 @@ function CadastroExerc(props){
             </div>
 
             <div className="">
-                <button className="quadrado-iniciar-exercicio">
+                <button className="quadrado-iniciar-exercicio" onClick={SalvarExercicio}>
                     <p>Iniciar exercício</p>
                 </button>
+                <p>{mensagemServidor}</p>
             </div>
         </div>
     </>

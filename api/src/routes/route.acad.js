@@ -8,4 +8,6 @@ routeAcad.get("/acad/treinoAberto", controllerAcad.PuxarTreinoAberto);
 routeAcad.get("/acad/grupoMuscular", controllerAcad.PuxarGrupoMuscular);
 routeAcad.get("/acad/grupoExercicio", controllerAcad.PuxarGrupoExercicio);
 
+routeAcad.get("/acad/exercicio/criar", controllerAcad.CriarExercicio);
+
 export default routeAcad;

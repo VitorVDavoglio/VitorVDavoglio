@@ -14,6 +14,7 @@ function HomeAcamedia(props){
     const [treinoIniciado, setTreinoIniciado] = useState(false);
     const [mensagemServidor, setMensagemServidor] = useState("");
     const [treinosAbertos, setTreinosAbertos] = useState([]);
+    const [treinoAbertoOrga, setTreinoAbertoOrga] = useState([]);
 
     useEffect(() => {
         TreinosAbertos();
@@ -41,6 +42,9 @@ function HomeAcamedia(props){
         })
         .catch(err => {
             console.log(err);
+            if(err.response.status === 400){
+                setMensagemServidor(err.response.data);
+            }
         })
     }
 
@@ -49,6 +53,7 @@ function HomeAcamedia(props){
         await apiTeste.get(`acad/treinoAberto`)
         .then(resp => {
             console.log(resp);
+            console.log(resp.data);
             setTreinosAbertos(resp.data);
         })
         .catch(err => {
@@ -76,16 +81,22 @@ function HomeAcamedia(props){
             </div>
 
             <div className="div-treino-ativo">
-                <h3>Treino ativo:</h3>
+                <h2>Treino ativo:</h2>
             </div>
 
             <div>
                 {treinosAbertos.map(treinos => {
-                    return <div>
-                        <button className="" onClick={() => CadastrarTreino(treinos.id_treino, treinos.data_inicio)}>
-                            <p>{treinos.id_treino}</p>
-                            <p>{treinos.data_inicio}</p>
-                        </button>
+                    return <div className="div-treino-separado">
+                            <h4>Início do treino: {treinos.data_inicio}</h4>
+                            <button className="button-treino-novo-exercicio" onClick={() => CadastrarTreino(treinos.id_treino, treinos.data_inicio)}>
+                                <p>Adicionar exercício</p>
+                            </button>
+                            <div>
+                                <p>Grupo Muscular: {treinos.nome_muscular}</p>
+                                <div>
+                                    <p>Exercicio: {treinos.nome_exercicio}</p>
+                                </div>
+                            </div>    
                     </div>
                 })}
             </div>
