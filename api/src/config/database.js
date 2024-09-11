@@ -1,7 +1,13 @@
 import mysql from "mysql";
 
-const dbConfig = mysql.createPool({
+const dbConfigSite = mysql.createPool({
 
 });
 
-export { dbConfig };
+
+const dbConfigMaestro = mysql.createPool({
+
+});
+
+
+export { dbConfigSite, dbConfigMaestro };

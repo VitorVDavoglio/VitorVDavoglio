@@ -7,56 +7,90 @@ import apiWeb from "../../../../services/apiWeb.js";
 import apiTeste from "../../../../services/apiTeste.js";
 import { CONSTANTES_SERVER } from "../../../../style/const.js";
 
-function HomeAcamedia(){
+
+function HomeAcamedia(props){
 
     const navigate = useNavigate();
-    const [dataInicio, setDataInicio] = useState('');
-    const username = CONSTANTES_SERVER.credentials_username;
-    const password = CONSTANTES_SERVER.credentials_password;
-    const credentials = btoa(`${username}:${password}`);
+    const [treinoIniciado, setTreinoIniciado] = useState(false);
+    const [mensagemServidor, setMensagemServidor] = useState("");
+    const [treinosAbertos, setTreinosAbertos] = useState([]);
 
     useEffect(() => {
-        if(dataInicio){
-            alert(dataInicio);
-            SalvarInicio();
-            
-        }
-    }, [dataInicio])
+        TreinosAbertos();
+    }, []);
 
-    function InicioNovoTreino(){
-        setDataInicio(new Date());
-    }
+    async function InicioNovoTreino() {
+       let now = new Date()
 
-    async function SalvarInicio() {
-        await apiTeste.get(`acad/treino/criar?hora_inicio=${dataInicio}`, {
-            headers: {
-                'Authorization' : `Basic ${credentials}`,
-            }
-        })
+
+       let dataSeparda = now.getDate();
+       let mesSeparda = now.getMonth();
+       let anoSeparda = now.getFullYear();
+       let horaSeparda = now.getHours();
+       let minSeparda = now.getMinutes();
+       let segSeparda = now.getSeconds();
+      
+       let dataCompleta = (anoSeparda + "-" + mesSeparda  + "-" + dataSeparda + " " + horaSeparda + ":" + minSeparda + ":" + segSeparda)
+
+        await apiTeste.get(`acad/treino/criar?hora_inicio=${dataCompleta}`)
         .then(resp => {
             console.log(resp);
+            if(resp.request.status === 200){
+                setMensagemServidor('Treino iniciado com sucesso');
+            }
         })
         .catch(err => {
             console.log(err);
         })
     }
 
+    async function TreinosAbertos() {
+
+        await apiTeste.get(`acad/treinoAberto`)
+        .then(resp => {
+            console.log(resp);
+            setTreinosAbertos(resp.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    function CadastrarTreino(key, data){
+        navigate("/academia/cadastro/exercicio", {state:{key_treino: key, data: data}})
+    }
+
+
     return <>
-    
+  
         <Navbar Interno />
 
         <div className="container">
             <h2>Página Academia</h2>
 
-            <button className="quadrado-iniciar-treino" onClick={InicioNovoTreino}>
-                <p>Iniciar novo treino</p>
-            </button> 
+            <div>
+                <button className="quadrado-iniciar-treino" onClick={InicioNovoTreino}>
+                    <p>Iniciar novo treino</p>
+                </button>
+                <p>{mensagemServidor}</p>
+            </div>
 
             <div className="div-treino-ativo">
                 <h3>Treino ativo:</h3>
             </div>
-        </div>
 
+            <div>
+                {treinosAbertos.map(treinos => {
+                    return <div>
+                        <button className="" onClick={() => CadastrarTreino(treinos.id_treino, treinos.data_inicio)}>
+                            <p>{treinos.id_treino}</p>
+                            <p>{treinos.data_inicio}</p>
+                        </button>
+                    </div>
+                })}
+            </div>
+
+        </div>
     </>
 }
 
