@@ -12,7 +12,8 @@ function CadastroExerc(props){
     const navigate = useNavigate();
     const location = useLocation();
     const [keyTreino, setKeyTreino] = useState("");
-    const [dataTreino, setDataTreino] = useState("");
+    const [dataInicioTreino, setDataInicioTreino] = useState("");
+    const [dataFimTreino, setDataFimTreino] = useState("");
     const [acaoPagina, setAcaoPagina] = useState("");
     const [grupoMuscular, setGrupoMuscular] = useState([]);
     const [idGrupoMuscularEscolhido, setIdGrupoMuscularEscolhido] = useState("");
@@ -24,7 +25,8 @@ function CadastroExerc(props){
     useEffect(() => {
         if(location.state){
             setKeyTreino(location.state.key_treino);
-            setDataTreino(location.state.data);
+            setDataInicioTreino(location.state.data_inicio);
+            setDataFimTreino(location.state.data_fim);
             setAcaoPagina(location.state.acao);
         }
         BuscarGruposMusculares();
@@ -89,7 +91,34 @@ function CadastroExerc(props){
     }
 
     function CadastrarSerie(key, nome){
-        navigate("/academia/cadastro/serie", {state:{key_exercicio: key, data: dataTreino, nome: nome}});
+        navigate("/academia/cadastro/serie", {state:{acao: '',key_exercicio: key, data: dataInicioTreino, nome: nome}});
+    }
+
+    async function FinalizarTreino() {
+        let now = new Date()
+
+       let dataSeparda = now.getDate();
+       let mesSeparda = now.getMonth() + 1;
+       mesSeparda = mesSeparda < 10 ? "0" + mesSeparda : mesSeparda;
+       let anoSeparda = now.getFullYear();
+       let horaSeparda = now.getHours();
+       let minSeparda = now.getMinutes();
+       let segSeparda = now.getSeconds();
+      
+       let dataCompleta = (anoSeparda + "-" + mesSeparda  + "-" + dataSeparda + " " + horaSeparda + ":" + minSeparda + ":" + segSeparda)
+        await apiTeste.get(`acad/treino/finalizar?data_fim=${dataCompleta}&id_treino=${keyTreino}`)
+        .then(resp => {
+            console.log(resp);
+            if(resp.request.status === 200){
+                alert('Treino finalizado com sucesso');
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            if(err.response.status === 400){
+                alert(err.response.data);
+            }
+        })
     }
 
     return <>
@@ -100,7 +129,9 @@ function CadastroExerc(props){
 
             <h2>Página Cadastro Exercício</h2>
 
-            <p>data_treino = {dataTreino}</p>
+            <p>data_treino = {dataInicioTreino}</p>
+
+            <p>data_fim_treino = {dataFimTreino}</p>
 
             <div className="">
                 <h4>Exercícios Feitos</h4>
@@ -117,10 +148,17 @@ function CadastroExerc(props){
                 }
                 
             </div>
+            
+            {
+                dataFimTreino ? <>
+                
+                </> : <>
+                    <button className="button-cadastro-adicionar-exerc" onClick={() => {setAcaoPagina('adicionarExerc')}}>
+                        <p>Adicionar Exercício</p>
+                    </button>
+                </>
+            }
 
-            <button className="button-cadastro-adicionar-exerc" onClick={() => {setAcaoPagina('adicionarExerc')}}>
-                <p>Adicionar Exercício</p>
-            </button>
             {
                 acaoPagina === 'adicionarExerc' ? <>
                 
@@ -161,6 +199,19 @@ function CadastroExerc(props){
                 
                 </>
             }
+
+            {
+                dataFimTreino ? <>
+                
+                </> : <>
+                <div className="button-cadastro-adicionar-exerc">
+                    <button className="" onClick={FinalizarTreino}>
+                        <p>Finalizar Treino</p>
+                    </button>
+                </div>
+                </>
+            }
+            
 
         </div>
     </>

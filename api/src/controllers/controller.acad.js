@@ -16,9 +16,25 @@ function CriarTreino(request, response){
     }
 };
 
-function PuxarTreinoAberto(request, response){
+function FinalizarTreino(request, response){
 
-    modelAcad.PuxarTreinoAberto(function(err, result){
+    if(!request.query.data_fim || !request.query.id_treino){
+        console.log('há dados faltando');
+        response.status(400).send('Treino não finalizado, não dados faltando.')
+    }else{
+        modelAcad.FinalizarTreino(request.query.data_fim, request.query.id_treino, function(err, result){
+           if(err){
+               response.status(500).send(err);
+            } else {
+               response.status(200).send(result);
+            }
+        })
+    }
+};
+
+function PuxarTreino(request, response){
+
+    modelAcad.PuxarTreino(function(err, result){
        if(err){
            response.status(500).send(err);
         } else {
@@ -26,9 +42,9 @@ function PuxarTreinoAberto(request, response){
             const completo = []
 
             result.map(dado => {
-                console.log(dado.id_treino)
+                console.log(dado.id_treino);
 
-                PuxarExerciciosTreinoAberto(dado.id_treino)
+                console.log(PuxarExerciciosTreinoAberto(dado.id_treino));
             })
 
             // console.log(completo)
@@ -38,6 +54,7 @@ function PuxarTreinoAberto(request, response){
         }
     })
 };
+
 
 function PuxarGrupoMuscular(request, response){
 
@@ -131,7 +148,8 @@ function PuxarSerie(request, response){
 
 
 export default { 
-    CriarTreino, PuxarTreinoAberto, PuxarGrupoMuscular, PuxarGrupoExercicio,
+    CriarTreino, PuxarTreino, PuxarGrupoMuscular, PuxarGrupoExercicio,
+    FinalizarTreino,
     CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto,
     CriarSerie, PuxarSerie, 
 }

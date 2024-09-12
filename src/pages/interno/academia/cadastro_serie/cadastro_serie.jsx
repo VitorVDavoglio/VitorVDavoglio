@@ -33,6 +33,7 @@ function CadastroSerie(props){
             setKeyExercicio(location.state.key_exercicio);
             setDataTreino(location.state.data);
             setNomeExercicio(location.state.nome);
+            setAcaoPagina(location.state.acao);
         }
         PuxarSerie();
     }, []);
@@ -93,12 +94,6 @@ function CadastroSerie(props){
     function VerificarDados(){
         if(numSeries && numRepeticoes && numCarga){
             GravarDados();
-            PuxarSerie();
-            setNumSeries(0);
-            setNumCarga(0);
-            setNumRepeticoes(0);
-            setTempo(0);
-            setTempoMin(0);
         }else{
             alert("Há dados faltando");
         }
@@ -116,6 +111,13 @@ function CadastroSerie(props){
             console.log(resp);
             if(resp.request.status === 200){
                 alert('Dado inserido com sucesso');
+                setNumSeries();
+                setNumCarga();
+                setNumRepeticoes();
+                setTempo(0);
+                setTempoMin(0);
+                setAcaoPagina('');
+                PuxarSerie();
             }
         })
         .catch(err => {
@@ -125,70 +127,88 @@ function CadastroSerie(props){
     
 
     return <>
-        <h2>Página Cadastro Exercício</h2>
-    
-        <h4>{nomeExercicio}</h4>
-        <p>{dataTreino}</p>
 
-        <div className="">
+        <Navbar Interno />
+
+        <div className="container">
+
+            <h2>Página Cadastro Série</h2>
+        
+            <h4>{nomeExercicio}</h4>
+            <p>Data Treino: {dataTreino}</p>
+
+            <div className="">
+                {
+                    series.map(dado => {
+                        return <>
+                            <div className="div-cadastro-series-feitas">
+                                <p><strong>Séries:</strong> {dado.num_series}</p>
+                                <p><strong>Carga:</strong> {dado.carga}Kg</p>
+                                <p><strong>Repetições:</strong> {dado.repeticoes}</p>
+                                <p><strong>descanso:</strong> {dado.descanso}</p>
+                            </div>
+                        </>
+                    })
+                }
+            </div>
+
+            <button className="" onClick={() => setAcaoPagina('adicionarSerie')}>
+                <p>Adicionar Série</p>
+            </button>
+
             {
-                series.map(dado => {
-                    return <>
-                        <div className="div-cadastro-series-feitas">
-                            <p><strong>Séries:</strong> {dado.num_series}</p>
-                            <p><strong>Carga:</strong> {dado.carga}Kg</p>
-                            <p><strong>Repetições:</strong> {dado.repeticoes}</p>
-                            <p><strong>descanso:</strong> {dado.descanso}</p>
+                acaoPagina === 'adicionarSerie' ? <> 
+                
+                    <div>    
+                        <p>Quantidade de séries feitas</p>
+                        
+                        <div className="">
+                            <input
+                                type="Number"
+                                value={numSeries}
+                                onChange={SalvarSerie}
+                            />
                         </div>
-                    </>
-                })
+                    </div>
+                    
+                    <div>    
+                        <p>Quantidade de carga</p>
+                        <div className="">
+                            <input
+                                type="Number"
+                                value={numCarga}
+                                onChange={SalvarCarga}
+                            />
+                            KG
+                        </div>
+                    </div>
+
+                    <div>    
+                        <p>Quantidade de repetições feitas</p>
+                        <div className="">
+                            <input
+                                type="Number"
+                                value={numRepeticoes}
+                                onChange={SalvarRepeticao}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <p>Tempo: {tempoMin}min {tempo}s</p>
+                        <button onClick={handleStartPause}>{isRunning ? 'Pausar' : 'Iniciar'}</button>
+                        <button onClick={handleZerarButton}>Zerar</button>
+                    </div>
+
+                    <button className="" onClick={VerificarDados}>
+                        <p>Salvar Série</p>
+                    </button>
+                </> : <> 
+                
+                </>
             }
         </div>
             
-        <div>    
-            <p>Quantidade de séries feitas</p>
-            
-            <div className="">
-                <input
-                    type="Number"
-                    value={numSeries}
-                    onChange={SalvarSerie}
-                />
-            </div>
-        </div>
-        
-        <div>    
-            <p>Quantidade de carga</p>
-            <div className="">
-                <input
-                    type="Number"
-                    value={numCarga}
-                    onChange={SalvarCarga}
-                />
-                KG
-            </div>
-        </div>
-
-        <div>    
-            <p>Quantidade de repetições feitas</p>
-            <div className="">
-                <input
-                    type="Number"
-                    value={numRepeticoes}
-                    onChange={SalvarRepeticao}
-                />
-            </div>
-        </div>
-
-        <div>
-            <p>Tempo: {tempoMin}min {tempo}s</p>
-            <button onClick={handleStartPause}>{isRunning ? 'Pausar' : 'Iniciar'}</button>
-            <button onClick={handleZerarButton}>Zerar</button>
-        </div>
-
-        <button className="" onClick={VerificarDados}>
-            <p>Salvar Série</p>
-        </button>
     </>
 }
 

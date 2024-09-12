@@ -14,20 +14,37 @@ function CriarTreino(hora_inicio, callback){
             callback(err, []);
         }
         else{
-            callback(undefined, 'Dado inserido com sucesso')
+            callback(undefined, 'Trenio iniciado com sucesso')
+        }
+    })
+}
+
+function FinalizarTreino(data_fim, id_treino, callback){
+  
+    let ssql = `
+        UPDATE 
+            acad_treino set data_fim = ?
+        WHERE 
+            id_treino = ?
+    `
+ 
+    dbConfigMaestro.query(ssql, [data_fim, id_treino], function(err, result){
+        if(err){
+            callback(err, []);
+        }
+        else{
+            callback(undefined, 'Treino finalizado com sucesso')
         }
     })
 }
  
-function PuxarTreinoAberto(callback){
+function PuxarTreino(callback){
    
     let ssql = `
         SELECT
             *
         FROM
             acad_treino
-        WHERE
-            data_fim IS NULL
     `
 
     dbConfigMaestro.query(ssql, function(err, result){
@@ -54,7 +71,8 @@ function PuxarExerciciosTreinoAberto(id_treino ,callback){
         JOIN
             acad_grupo_muscular agm ON agm.id_grupo_muscular = age.key_grupo_muscular
         WHERE
-            at.id_treino = ?
+            at.id_treino = ? AND 
+            at.data_fim IS NULL
         GROUP BY
             agm.nome;
     `
@@ -68,7 +86,6 @@ function PuxarExerciciosTreinoAberto(id_treino ,callback){
         }
     })
 }
-
 
 function PuxarGrupoMuscular(callback){
    
@@ -139,6 +156,8 @@ function PuxarExerciciosTreino(id_treino ,callback){
    
     let ssql = `
         SELECT
+            at.data_inicio,
+            at.data_fim,
             ae.id_exercicio,
             age.nome AS nome_exercicio,
             agm.nome AS nome_muscular
@@ -212,7 +231,8 @@ function PuxarSerie(key_exercicio ,callback){
 }
  
 export default { 
-    CriarTreino, PuxarTreinoAberto, PuxarGrupoMuscular, PuxarGrupoExercicio, 
+    CriarTreino, PuxarTreino, PuxarGrupoMuscular, PuxarGrupoExercicio, 
+    FinalizarTreino,
     CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto, 
     CriarSerie, PuxarSerie, 
 }

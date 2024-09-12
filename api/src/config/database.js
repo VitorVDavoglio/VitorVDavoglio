@@ -10,5 +10,4 @@ const dbConfigMaestro = mysql.createPool({
 });
 
 
-
 export { dbConfigSite, dbConfigMaestro };

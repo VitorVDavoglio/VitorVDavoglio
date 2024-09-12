@@ -4,7 +4,8 @@ import controllerAcad from "../controllers/controller.acad.js";
 const routeAcad = Router();
 
 routeAcad.get("/acad/treino/criar", controllerAcad.CriarTreino);
-routeAcad.get("/acad/treinoAberto", controllerAcad.PuxarTreinoAberto);
+routeAcad.get("/acad/treino/finalizar", controllerAcad.FinalizarTreino);
+routeAcad.get("/acad/puxarTreino", controllerAcad.PuxarTreino);
 routeAcad.get("/acad/grupoMuscular", controllerAcad.PuxarGrupoMuscular);
 routeAcad.get("/acad/grupoExercicio", controllerAcad.PuxarGrupoExercicio);
 
