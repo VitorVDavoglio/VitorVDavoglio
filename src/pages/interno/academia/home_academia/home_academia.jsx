@@ -61,8 +61,12 @@ function HomeAcamedia(props){
         })
     }
 
-    function CadastrarTreino(key, data){
-        navigate("/academia/cadastro/exercicio", {state:{key_treino: key, data: data}})
+    function CadastrarExercicio(key, data){
+        navigate("/academia/cadastro/exercicio", {state:{acao: 'adicionarExerc',key_treino: key, data: data}});
+    }
+
+    function AbrirTreino(key, data){
+        navigate("/academia/cadastro/exercicio", {state:{acao: 'verTreino',key_treino: key, data: data}});
     }
 
 
@@ -88,15 +92,15 @@ function HomeAcamedia(props){
                 {treinosAbertos.map(treinos => {
                     return <div className="div-treino-separado">
                             <h4>Início do treino: {treinos.data_inicio}</h4>
-                            <button className="button-treino-novo-exercicio" onClick={() => CadastrarTreino(treinos.id_treino, treinos.data_inicio)}>
+                            <button className="button-treino-novo-exercicio" onClick={() => CadastrarExercicio(treinos.id_treino, treinos.data_inicio)}>
                                 <p>Adicionar exercício</p>
                             </button>
                             <div>
-                                <p>Grupo Muscular: {treinos.nome_muscular}</p>
-                                <div>
-                                    <p>Exercicio: {treinos.nome_exercicio}</p>
-                                </div>
+                                <p>Grupo Muscular: Dorsal(2)</p>
                             </div>    
+                            <button className="button-treino-abrir-exercicio" onClick={() => AbrirTreino(treinos.id_treino, treinos.data_inicio)}>
+                                <p>Abrir Treino</p>
+                            </button>
                     </div>
                 })}
             </div>

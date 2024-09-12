@@ -22,19 +22,19 @@ function PuxarTreinoAberto(request, response){
        if(err){
            response.status(500).send(err);
         } else {
-
-            let completo = []
+            // TODO colocar a parte de musculo e quantidade e clicar em cima
+            const completo = []
 
             result.map(dado => {
                 console.log(dado.id_treino)
 
-                PuxarExerciciosTreino(dado.id_treino)
+                PuxarExerciciosTreinoAberto(dado.id_treino)
             })
 
             // console.log(completo)
 
 
-        //    response.status(200).send(result);
+           response.status(200).send(result);
         }
     })
 };
@@ -77,15 +77,43 @@ function CriarExercicio(request, response){
     }
 };
 
-function PuxarExerciciosTreino(request, response){
+function PuxarExerciciosTreinoAberto(request, response){
 
-    modelAcad.PuxarExerciciosTreino(request, function(err, result){
+    modelAcad.PuxarExerciciosTreinoAberto(request, function(err, result){
        if(err){
            response.status(500).send(err);
         } else {
             result.id_treino = request;
-            console.log(result)
+            console.log(result);
         //    response.status(200).send(result);
+        }
+   })
+};
+
+function PuxarExerciciosTreino(request, response){
+
+    modelAcad.PuxarExerciciosTreino(request.query.key_treino, function(err, result){
+       if(err){
+           response.status(500).send(err);
+        } else {
+           response.status(200).send(result);
+        }
+   })
+};
+
+function CriarSerie(request, response){
+
+    modelAcad.CriarSerie(
+        request.query.key_exercicio, 
+        request.query.num_series,
+        request.query.repeticoes,
+        request.query.carga,
+        request.query.escanso, 
+        function(err, result){
+       if(err){
+           response.status(500).send(err);
+        } else {
+           response.status(200).send(result);
         }
    })
 };
@@ -93,5 +121,6 @@ function PuxarExerciciosTreino(request, response){
 
 export default { 
     CriarTreino, PuxarTreinoAberto, PuxarGrupoMuscular, PuxarGrupoExercicio,
-    CriarExercicio, PuxarExerciciosTreino
+    CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto,
+    CriarSerie
 }

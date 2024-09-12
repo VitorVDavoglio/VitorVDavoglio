@@ -13,19 +13,34 @@ function CadastroExerc(props){
     const location = useLocation();
     const [keyTreino, setKeyTreino] = useState("");
     const [dataTreino, setDataTreino] = useState("");
+    const [acaoPagina, setAcaoPagina] = useState("");
     const [grupoMuscular, setGrupoMuscular] = useState([]);
     const [idGrupoMuscularEscolhido, setIdGrupoMuscularEscolhido] = useState("");
     const [grupoExercicio, setGrupoExercicio] = useState([]);
     const [idGrupoExercicioEscolhido, setIdGrupoExercicioEscolhido] = useState("");
     const [mensagemServidor, setMensagemServidor] = useState("");
+    const [exerciciosFeitos, setExerciciosFeitos] = useState([]);
 
     useEffect(() => {
         if(location.state){
             setKeyTreino(location.state.key_treino);
             setDataTreino(location.state.data);
+            setAcaoPagina(location.state.acao);
         }
         BuscarGruposMusculares();
+        BuscarExercicios();
     }, []);
+
+    async function BuscarExercicios() {
+        await apiTeste.get(`/acad/exercicios?key_treino=${location.state.key_treino}`)
+        .then(resp => {
+            console.log(resp.data)
+            setExerciciosFeitos(resp.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     async function BuscarGruposMusculares() {
         await apiTeste.get(`/acad/grupoMuscular`)
@@ -73,6 +88,10 @@ function CadastroExerc(props){
         })
     }
 
+    function CadastrarSerie(key, nome){
+        navigate("/academia/cadastro/serie", {state:{key_exercicio: key, data: dataTreino, nome: nome}});
+    }
+
     return <>
 
         <Navbar Interno />
@@ -84,38 +103,65 @@ function CadastroExerc(props){
             <p>data_treino = {dataTreino}</p>
 
             <div className="">
-                <h4>Selecione o grupo muscular desejado:</h4>
-                <select class="form-select" aria-label="Default select example" onChange={GrupoMuscularSelecionado}>
-                    <option selected>...</option>
-                    {
-                        grupoMuscular.map(grupo => {
-                            return <option value={grupo.id_grupo_muscular}>{grupo.nome}</option>
-                            
-                        })
-                    }
-                </select>
-                <p>{idGrupoMuscularEscolhido}</p>
+                <h4>Exercícios Feitos</h4>
+                
+                {
+                    exerciciosFeitos.map(exerc => {
+                        return <>
+                            <p><strong>{exerc.nome_muscular}</strong></p>
+                            <button className="" onClick={() => CadastrarSerie(exerc.id_exercicio, exerc.nome_exercicio)}>
+                                <p>{exerc.nome_exercicio}</p>
+                            </button>
+                        </>
+                    })
+                }
+                
             </div>
 
-            <div className="">
-                <h4>Selecione o exercicio desejado:</h4>
-                <select class="form-select" aria-label="Default select example" onChange={GrupoExercicioSelecionado}>
-                    <option selected>...</option>
-                    {
-                        grupoExercicio.map(grupo => {
-                            return <option value={grupo.id_grupo_exercicio}>{grupo.nome}</option>
-                        })
-                    }
-                </select>
-                <p>{idGrupoExercicioEscolhido}</p>
-            </div>
+            <button className="button-cadastro-adicionar-exerc" onClick={() => {setAcaoPagina('adicionarExerc')}}>
+                <p>Adicionar Exercício</p>
+            </button>
+            {
+                acaoPagina === 'adicionarExerc' ? <>
+                
+                    <div className="">
+                        <h4>Selecione o grupo muscular desejado:</h4>
+                        <select class="form-select" aria-label="Default select example" onChange={GrupoMuscularSelecionado}>
+                            <option selected>...</option>
+                            {
+                                grupoMuscular.map(grupo => {
+                                    return <option value={grupo.id_grupo_muscular}>{grupo.nome}</option>
+                                    
+                                })
+                            }
+                        </select>
+                        <p>{idGrupoMuscularEscolhido}</p>
+                    </div>
 
-            <div className="">
-                <button className="quadrado-iniciar-exercicio" onClick={SalvarExercicio}>
-                    <p>Iniciar exercício</p>
-                </button>
-                <p>{mensagemServidor}</p>
-            </div>
+                    <div className="">
+                        <h4>Selecione o exercicio desejado:</h4>
+                        <select class="form-select" aria-label="Default select example" onChange={GrupoExercicioSelecionado}>
+                            <option selected>...</option>
+                            {
+                                grupoExercicio.map(grupo => {
+                                    return <option value={grupo.id_grupo_exercicio}>{grupo.nome}</option>
+                                })
+                            }
+                        </select>
+                        <p>{idGrupoExercicioEscolhido}</p>
+                    </div>
+
+                    <div className="">
+                        <button className="quadrado-iniciar-exercicio" onClick={SalvarExercicio}>
+                            <p>Iniciar exercício</p>
+                        </button>
+                        <p>{mensagemServidor}</p>
+                    </div>
+                </> : <>
+                
+                </>
+            }
+
         </div>
     </>
 }

@@ -39,7 +39,35 @@ function PuxarTreinoAberto(callback){
         }
     })
 }
-
+function PuxarExerciciosTreinoAberto(id_treino ,callback){
+   
+    let ssql = `
+        SELECT
+            agm.nome AS nome_muscular,
+            COUNT(*) AS quantidade
+        FROM
+            acad_treino at
+        JOIN
+            acad_exercicio ae ON ae.key_treino = at.id_treino
+        JOIN
+            acad_grupo_exercicio age ON age.id_grupo_exercicio = ae.key_grupo_exercicio
+        JOIN
+            acad_grupo_muscular agm ON agm.id_grupo_muscular = age.key_grupo_muscular
+        WHERE
+            at.id_treino = ?
+        GROUP BY
+            agm.nome;
+    `
+ 
+    dbConfigMaestro.query(ssql, [id_treino], function(err, result){
+        if(err){
+            callback(err, []);
+        }
+        else{
+            callback(undefined, result)
+        }
+    })
+}
 
 
 function PuxarGrupoMuscular(callback){
@@ -111,8 +139,9 @@ function PuxarExerciciosTreino(id_treino ,callback){
    
     let ssql = `
         SELECT
-            agm.nome AS nome_muscular,
-            COUNT(*) AS quantidade
+            ae.id_exercicio,
+            age.nome AS nome_exercicio,
+            agm.nome AS nome_muscular
         FROM
             acad_treino at
         JOIN
@@ -123,8 +152,8 @@ function PuxarExerciciosTreino(id_treino ,callback){
             acad_grupo_muscular agm ON agm.id_grupo_muscular = age.key_grupo_muscular
         WHERE
             at.id_treino = ?
-        GROUP BY
-            agm.nome;
+        ORDER BY 
+		    age.nome ASC
     `
  
     dbConfigMaestro.query(ssql, [id_treino], function(err, result){
@@ -136,9 +165,29 @@ function PuxarExerciciosTreino(id_treino ,callback){
         }
     })
 }
+
+function CriarSerie(key_exercicio, num_series, repeticoes, carga, escanso, callback){
+  
+    let ssql = `
+        INSERT INTO
+            acad_series(key_exercicio,num_series,repeticoes,carga,escanso)
+        VALUES
+            (?,?,?,?,?)
+    `
+ 
+    dbConfigMaestro.query(ssql, [key_exercicio, num_series, repeticoes, carga, escanso], function(err, result){
+        if(err){
+            callback(err, []);
+        }
+        else{
+            callback(undefined, 'Série inserida com sucesso')
+        }
+    })
+}
  
 export default { 
     CriarTreino, PuxarTreinoAberto, PuxarGrupoMuscular, PuxarGrupoExercicio, 
-    CriarExercicio, PuxarExerciciosTreino, 
+    CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto, 
+    CriarSerie
 }
  
