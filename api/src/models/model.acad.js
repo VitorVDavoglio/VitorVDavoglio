@@ -166,16 +166,16 @@ function PuxarExerciciosTreino(id_treino ,callback){
     })
 }
 
-function CriarSerie(key_exercicio, num_series, repeticoes, carga, escanso, callback){
+function CriarSerie(key_exercicio, num_series, repeticoes, carga, descanso, callback){
   
     let ssql = `
         INSERT INTO
-            acad_series(key_exercicio,num_series,repeticoes,carga,escanso)
+            acad_series(key_exercicio,num_series,repeticoes,carga,descanso)
         VALUES
             (?,?,?,?,?)
     `
  
-    dbConfigMaestro.query(ssql, [key_exercicio, num_series, repeticoes, carga, escanso], function(err, result){
+    dbConfigMaestro.query(ssql, [key_exercicio, num_series, repeticoes, carga, descanso], function(err, result){
         if(err){
             callback(err, []);
         }
@@ -184,10 +184,36 @@ function CriarSerie(key_exercicio, num_series, repeticoes, carga, escanso, callb
         }
     })
 }
+
+function PuxarSerie(key_exercicio ,callback){
+   
+    let ssql = `
+        SELECT 
+            num_series,
+            repeticoes,
+            carga,
+            descanso
+        FROM
+            acad_series
+        WHERE
+            key_exercicio = ?
+        ORDER BY
+            id_serie ASC
+    `
+ 
+    dbConfigMaestro.query(ssql, [key_exercicio], function(err, result){
+        if(err){
+            callback(err, []);
+        }
+        else{
+            callback(undefined, result)
+        }
+    })
+}
  
 export default { 
     CriarTreino, PuxarTreinoAberto, PuxarGrupoMuscular, PuxarGrupoExercicio, 
     CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto, 
-    CriarSerie
+    CriarSerie, PuxarSerie, 
 }
  

@@ -108,8 +108,19 @@ function CriarSerie(request, response){
         request.query.num_series,
         request.query.repeticoes,
         request.query.carga,
-        request.query.escanso, 
+        request.query.descanso, 
         function(err, result){
+       if(err){
+           response.status(500).send(err);
+        } else {
+           response.status(200).send(result);
+        }
+   })
+};
+
+function PuxarSerie(request, response){
+
+    modelAcad.PuxarSerie(request.query.key_exercicio, function(err, result){
        if(err){
            response.status(500).send(err);
         } else {
@@ -122,5 +133,5 @@ function CriarSerie(request, response){
 export default { 
     CriarTreino, PuxarTreinoAberto, PuxarGrupoMuscular, PuxarGrupoExercicio,
     CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto,
-    CriarSerie
+    CriarSerie, PuxarSerie, 
 }

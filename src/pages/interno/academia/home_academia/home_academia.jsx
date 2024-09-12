@@ -96,7 +96,7 @@ function HomeAcamedia(props){
                                 <p>Adicionar exercício</p>
                             </button>
                             <div>
-                                <p>Grupo Muscular: Dorsal(2)</p>
+                                <p>Grupo Muscular: ex: Dorsal(2)</p>
                             </div>    
                             <button className="button-treino-abrir-exercicio" onClick={() => AbrirTreino(treinos.id_treino, treinos.data_inicio)}>
                                 <p>Abrir Treino</p>

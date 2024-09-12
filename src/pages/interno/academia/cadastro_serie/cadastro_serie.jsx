@@ -24,6 +24,9 @@ function CadastroSerie(props){
     const [tempoMin, setTempoMin] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
 
+    const [series, setSeries] = useState([]);
+    const [avisoSeries, setAvisoSeries] = useState("");
+
 
     useEffect(() => {
         if(location.state){
@@ -31,20 +34,26 @@ function CadastroSerie(props){
             setDataTreino(location.state.data);
             setNomeExercicio(location.state.nome);
         }
+        PuxarSerie();
     }, []);
 
+    async function PuxarSerie() {
+        await apiTeste.get(`/acad/series?key_exercicio=${location.state.key_exercicio}`)
+        .then(resp => {
+            console.log(resp.data);
+            setSeries(resp.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
     const SalvarSerie = (event) => {
-        const newValue = parseInt(event.target.value);
-        if (!isNaN(newValue)) {
-            setNumSeries(newValue);
-        }
+        setNumSeries(event.target.value);
     };
 
     const SalvarRepeticao = (event) => {
-        const newValue = parseInt(event.target.value);
-        if (!isNaN(newValue)) {
-            setNumRepeticoes(newValue);
-        }
+        setNumRepeticoes(event.target.value);
     };
 
     const SalvarCarga = (event) => {
@@ -83,7 +92,13 @@ function CadastroSerie(props){
 
     function VerificarDados(){
         if(numSeries && numRepeticoes && numCarga){
-            GravarDados()
+            GravarDados();
+            PuxarSerie();
+            setNumSeries(0);
+            setNumCarga(0);
+            setNumRepeticoes(0);
+            setTempo(0);
+            setTempoMin(0);
         }else{
             alert("Há dados faltando");
         }
@@ -96,7 +111,7 @@ function CadastroSerie(props){
 
         let descanso = tempoMin + ':' + tempo;
         
-        await apiTeste.get(`/acad/serie/criar?key_exercicio=${keyExercicio}&num_series=${numSeries}&repeticoes=${numRepeticoes}&carga=${numCarga}&escanso=${descanso}`)
+        await apiTeste.get(`/acad/serie/criar?key_exercicio=${keyExercicio}&num_series=${numSeries}&repeticoes=${numRepeticoes}&carga=${numCarga}&descanso=${descanso}`)
         .then(resp => {
             console.log(resp);
             if(resp.request.status === 200){
@@ -114,6 +129,21 @@ function CadastroSerie(props){
     
         <h4>{nomeExercicio}</h4>
         <p>{dataTreino}</p>
+
+        <div className="">
+            {
+                series.map(dado => {
+                    return <>
+                        <div className="div-cadastro-series-feitas">
+                            <p><strong>Séries:</strong> {dado.num_series}</p>
+                            <p><strong>Carga:</strong> {dado.carga}Kg</p>
+                            <p><strong>Repetições:</strong> {dado.repeticoes}</p>
+                            <p><strong>descanso:</strong> {dado.descanso}</p>
+                        </div>
+                    </>
+                })
+            }
+        </div>
             
         <div>    
             <p>Quantidade de séries feitas</p>
@@ -128,17 +158,6 @@ function CadastroSerie(props){
         </div>
         
         <div>    
-            <p>Quantidade de repetições feitas</p>
-            <div className="">
-                <input
-                    type="Number"
-                    value={numRepeticoes}
-                    onChange={SalvarRepeticao}
-                />
-            </div>
-        </div>
-
-        <div>    
             <p>Quantidade de carga</p>
             <div className="">
                 <input
@@ -147,6 +166,17 @@ function CadastroSerie(props){
                     onChange={SalvarCarga}
                 />
                 KG
+            </div>
+        </div>
+
+        <div>    
+            <p>Quantidade de repetições feitas</p>
+            <div className="">
+                <input
+                    type="Number"
+                    value={numRepeticoes}
+                    onChange={SalvarRepeticao}
+                />
             </div>
         </div>
 
