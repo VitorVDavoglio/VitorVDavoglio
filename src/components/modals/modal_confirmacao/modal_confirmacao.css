@@ -1,0 +1,28 @@
+.react-modal-content-confirmacao{
+    display: flex;
+    margin: auto;
+    width: 70%;
+    max-width: 350px;
+    background: #ffffff;
+    position: absolute;
+    border-radius: 10px;
+    margin-left: 0px;
+}
+
+.div-titulo-modal-confirmacao{
+    margin: 15px;
+    margin-bottom: 60px;
+}
+
+.div-titulo-modal-confirmacao-botao{
+    display: flex;
+    margin-bottom: 20px;
+}
+.div-titulo-modal-confirmacao-botao button{
+    display: flex;
+    margin: auto;
+}
+.div-titulo-modal-confirmacao-botao p{
+    display: flex;
+    margin: auto;
+}

@@ -29,7 +29,6 @@ function CadastroExerc(props){
             setDataFimTreino(location.state.data_fim);
             setAcaoPagina(location.state.acao);
         }
-        BuscarGruposMusculares();
         BuscarExercicios();
     }, []);
 
@@ -90,8 +89,8 @@ function CadastroExerc(props){
         })
     }
 
-    function CadastrarSerie(key, nome){
-        navigate("/academia/cadastro/serie", {state:{acao: '',key_exercicio: key, data: dataInicioTreino, nome: nome}});
+    function CadastrarSerie(key, nome, status){
+        navigate("/academia/cadastro/serie", {state:{acao: '',key_exercicio: key, data: dataInicioTreino, nome: nome, status: status}});
     }
 
     async function FinalizarTreino() {
@@ -127,23 +126,35 @@ function CadastroExerc(props){
 
         <div className="container">
 
-            <h2>Página Cadastro Exercício</h2>
+            <h2>Treino de ...Seg...</h2>
 
-            <p>data_treino = {dataInicioTreino}</p>
+            <p>Início = {dataInicioTreino}</p>
 
-            <p>data_fim_treino = {dataFimTreino}</p>
+            <p>Status - Fim = {dataFimTreino}</p>
 
             <div className="">
                 <h4>Exercícios Feitos</h4>
                 
                 {
                     exerciciosFeitos.map(exerc => {
-                        return <>
+                        return <div className="div-cadastro-exerc-feitos">
                             <p><strong>{exerc.nome_muscular}</strong></p>
-                            <button className="" onClick={() => CadastrarSerie(exerc.id_exercicio, exerc.nome_exercicio)}>
-                                <p>{exerc.nome_exercicio}</p>
-                            </button>
-                        </>
+                            <div className="div-cadastro-exerc-feitos-series">
+                                <h4>{exerc.nome_exercicio}</h4>
+                                <button className="" onClick={() => CadastrarSerie(exerc.id_exercicio, exerc.nome_exercicio, exerc.status_exercicio)}>
+                                    <p>1x 15kg 15x</p>
+                                </button>
+                                <p className="p-div-cadastro-exerc-feitos-series">
+                                    {
+                                        exerc.status_exercicio === 'F' ? <>
+                                            Exercício Finalizado
+                                        </> : <>
+                                            Exercício Aberto
+                                        </>
+                                    }
+                                </p>
+                            </div>
+                        </div>
                     })
                 }
                 
@@ -153,7 +164,7 @@ function CadastroExerc(props){
                 dataFimTreino ? <>
                 
                 </> : <>
-                    <button className="button-cadastro-adicionar-exerc" onClick={() => {setAcaoPagina('adicionarExerc')}}>
+                    <button className="button-cadastro-adicionar-exerc" onClick={() => {setAcaoPagina('adicionarExerc'); BuscarGruposMusculares();}}>
                         <p>Adicionar Exercício</p>
                     </button>
                 </>

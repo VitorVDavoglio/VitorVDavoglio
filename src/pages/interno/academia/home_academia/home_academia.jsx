@@ -7,14 +7,24 @@ import apiWeb from "../../../../services/apiWeb.js";
 import apiTeste from "../../../../services/apiTeste.js";
 import { CONSTANTES_SERVER } from "../../../../style/const.js";
 
+import ModalConfirmacao from "../../../../components/modals/modal_confirmacao/modal_confirmacao.jsx";
 
 function HomeAcamedia(props){
 
     const navigate = useNavigate();
     const [treinoIniciado, setTreinoIniciado] = useState(false);
-    const [mensagemServidor, setMensagemServidor] = useState("");
     const [treinosAbertos, setTreinosAbertos] = useState([]);
     const [treinosFechados, setTreinosFechados] = useState([]);
+
+    const [isModalConfirmacaoOpen, setIsModalConfirmacaoOpen] = useState(false);
+
+    function openModalConfirmacao(event){
+        setIsModalConfirmacaoOpen(true);
+    }
+    
+    function closeModalConfirmacao(){
+        setIsModalConfirmacaoOpen(false);
+    }
 
     useEffect(() => {
         setTreinosAbertos([]);
@@ -39,6 +49,16 @@ function HomeAcamedia(props){
         })
     }
 
+    const handleConfirmNewTraining = (confirmed) => {
+        if(confirmed){
+            console.log("Novo treino confirmado!");
+            InicioNovoTreino();
+        }else{
+            console.log("Novo treino cancelado!");
+        }
+        setIsModalConfirmacaoOpen(false);
+    };
+
     async function InicioNovoTreino() {
        let now = new Date()
 
@@ -51,30 +71,28 @@ function HomeAcamedia(props){
        let segSeparda = now.getSeconds();
       
        let dataCompleta = (anoSeparda + "-" + mesSeparda  + "-" + dataSeparda + " " + horaSeparda + ":" + minSeparda + ":" + segSeparda)
+
         await apiTeste.get(`acad/treino/criar?hora_inicio=${dataCompleta}`)
         .then(resp => {
             console.log(resp);
             if(resp.request.status === 200){
-                setMensagemServidor('Treino iniciado com sucesso');
+                setTreinosAbertos([]);
+                PuxarTreino();
             }
         })
         .catch(err => {
             console.log(err);
             if(err.response.status === 400){
-                setMensagemServidor(err.response.data);
+                alert(err.response.data);
             }
         })
     }
-
-   
 
     function CadastrarExercicio(key, data){
         navigate("/academia/cadastro/exercicio", {state:{acao: 'adicionarExerc',key_treino: key, data: data}});
     }
 
     function AbrirTreino(key, data_inicio, data_fim){
-        console.log(data_inicio);
-        console.log(data_fim);
         navigate("/academia/cadastro/exercicio", {state:{acao: 'verTreino',key_treino: key, data_inicio: data_inicio, data_fim: data_fim}});
     }
 
@@ -83,15 +101,15 @@ function HomeAcamedia(props){
   
         <Navbar Interno />
 
+        <ModalConfirmacao 
+            isOpen={isModalConfirmacaoOpen}
+            onRequestClose={closeModalConfirmacao}
+            titulo='treino'
+            onConfirm={handleConfirmNewTraining}
+        />
+
         <div className="container">
             <h2>Página Academia</h2>
-
-            <div>
-                <button className="quadrado-iniciar-treino" onClick={InicioNovoTreino}>
-                    <p>Iniciar novo treino</p>
-                </button>
-                <p>{mensagemServidor}</p>
-            </div>
 
             <div className="div-treino-ativo">
                 <h2>Treino ativo:</h2>
@@ -112,6 +130,12 @@ function HomeAcamedia(props){
                             </button>
                     </div>
                 })}
+
+                <div className="div-home-academia-button-iniciar-treino">
+                    <button className="button-iniciar-treino" onClick={openModalConfirmacao}>
+                        <p>Iniciar novo treino</p>
+                    </button>
+                </div>
             </div>
             
 

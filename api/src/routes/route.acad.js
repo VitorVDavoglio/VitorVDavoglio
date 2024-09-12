@@ -12,6 +12,7 @@ routeAcad.get("/acad/grupoExercicio", controllerAcad.PuxarGrupoExercicio);
 routeAcad.get("/acad/exercicio/criar", controllerAcad.CriarExercicio);
 routeAcad.get("/acad/exercicios", controllerAcad.PuxarExerciciosTreino);
 routeAcad.get("/acad/serie/criar", controllerAcad.CriarSerie);
+routeAcad.get("/acad/serie/finalizar", controllerAcad.FinalizarSerie);
 routeAcad.get("/acad/series", controllerAcad.PuxarSerie);
 
 export default routeAcad;

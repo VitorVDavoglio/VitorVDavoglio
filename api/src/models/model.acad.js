@@ -156,9 +156,8 @@ function PuxarExerciciosTreino(id_treino ,callback){
    
     let ssql = `
         SELECT
-            at.data_inicio,
-            at.data_fim,
             ae.id_exercicio,
+            ae.status_exercicio,
             age.nome AS nome_exercicio,
             agm.nome AS nome_muscular
         FROM
@@ -229,11 +228,30 @@ function PuxarSerie(key_exercicio ,callback){
         }
     })
 }
+
+function FinalizarSerie(status_exercicio, id_exercicio, callback){
+  
+    let ssql = `
+        UPDATE 
+            acad_exercicio set status_exercicio = ?
+        WHERE 
+            id_exercicio = ?
+    `
+ 
+    dbConfigMaestro.query(ssql, [status_exercicio, id_exercicio], function(err, result){
+        if(err){
+            callback(err, []);
+        }
+        else{
+            callback(undefined, 'Série finalizada com sucesso')
+        }
+    })
+}
  
 export default { 
     CriarTreino, PuxarTreino, PuxarGrupoMuscular, PuxarGrupoExercicio, 
     FinalizarTreino,
     CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto, 
-    CriarSerie, PuxarSerie, 
+    CriarSerie, PuxarSerie, FinalizarSerie, 
 }
  

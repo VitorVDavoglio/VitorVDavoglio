@@ -146,10 +146,21 @@ function PuxarSerie(request, response){
    })
 };
 
+function FinalizarSerie(request, response){
+
+    modelAcad.FinalizarSerie(request.query.status_exercicio, request.query.id_exercicio, function(err, result){
+       if(err){
+           response.status(500).send(err);
+        } else {
+           response.status(200).send(result);
+        }
+   })
+};
+
 
 export default { 
     CriarTreino, PuxarTreino, PuxarGrupoMuscular, PuxarGrupoExercicio,
     FinalizarTreino,
     CriarExercicio, PuxarExerciciosTreino, PuxarExerciciosTreinoAberto,
-    CriarSerie, PuxarSerie, 
+    CriarSerie, PuxarSerie, FinalizarSerie, 
 }

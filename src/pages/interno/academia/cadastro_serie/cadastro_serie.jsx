@@ -15,6 +15,7 @@ function CadastroSerie(props){
     const [nomeExercicio, setNomeExercicio] = useState("");
     const [dataTreino, setDataTreino] = useState("");
     const [acaoPagina, setAcaoPagina] = useState("");
+    const [statusExercicio, setStatusExercicio] = useState("");
 
     const [numSeries, setNumSeries] = useState();
     const [numRepeticoes, setNumRepeticoes] = useState();
@@ -34,6 +35,7 @@ function CadastroSerie(props){
             setDataTreino(location.state.data);
             setNomeExercicio(location.state.nome);
             setAcaoPagina(location.state.acao);
+            setStatusExercicio(location.state.status);
         }
         PuxarSerie();
     }, []);
@@ -41,25 +43,17 @@ function CadastroSerie(props){
     async function PuxarSerie() {
         await apiTeste.get(`/acad/series?key_exercicio=${location.state.key_exercicio}`)
         .then(resp => {
-            console.log(resp.data);
-            setSeries(resp.data);
+            console.log(resp.data)
+            if(resp.data.length){
+                setSeries(resp.data);
+            }else{
+                setAcaoPagina('adicionarSerie')
+            }
         })
         .catch(err => {
             console.log(err);
         })
     }
-
-    const SalvarSerie = (event) => {
-        setNumSeries(event.target.value);
-    };
-
-    const SalvarRepeticao = (event) => {
-        setNumRepeticoes(event.target.value);
-    };
-
-    const SalvarCarga = (event) => {
-        setNumCarga(event.target.value);
-    };
 
     useEffect(() => {
         let intervalId;
@@ -124,6 +118,21 @@ function CadastroSerie(props){
             console.log(err);
         })
     }
+
+    async function FinalizarSerie() {
+        let status = 'F';
+        await apiTeste.get(`/acad/serie/finalizar?status_exercicio=${status}&id_exercicio=${keyExercicio}`)
+        .then(resp => {
+            console.log(resp);
+            if(resp.request.status === 200){
+                alert('Série finalizada com sucesso');
+                setStatusExercicio('F');
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
     
 
     return <>
@@ -132,10 +141,12 @@ function CadastroSerie(props){
 
         <div className="container">
 
-            <h2>Página Cadastro Série</h2>
+            <h2>Treino de ...Seg...</h2>
         
-            <h4>{nomeExercicio}</h4>
             <p>Data Treino: {dataTreino}</p>
+            <h4>{nomeExercicio}</h4>
+
+            <p>Status Exercício: {statusExercicio}</p>
 
             <div className="">
                 {
@@ -152,9 +163,16 @@ function CadastroSerie(props){
                 }
             </div>
 
-            <button className="" onClick={() => setAcaoPagina('adicionarSerie')}>
-                <p>Adicionar Série</p>
-            </button>
+            {
+                statusExercicio === 'F' ? <>
+                
+                </> : <>
+                    <button className="" onClick={() => setAcaoPagina('adicionarSerie')}>
+                        <p>Adicionar Série</p>
+                    </button>
+                </>
+            }
+
 
             {
                 acaoPagina === 'adicionarSerie' ? <> 
@@ -166,7 +184,9 @@ function CadastroSerie(props){
                             <input
                                 type="Number"
                                 value={numSeries}
-                                onChange={SalvarSerie}
+                                onChange={(event) => {
+                                    setNumSeries(event.target.value);
+                                }}
                             />
                         </div>
                     </div>
@@ -177,7 +197,9 @@ function CadastroSerie(props){
                             <input
                                 type="Number"
                                 value={numCarga}
-                                onChange={SalvarCarga}
+                                onChange={(event) => {
+                                    setNumCarga(event.target.value);
+                                }}
                             />
                             KG
                         </div>
@@ -189,7 +211,9 @@ function CadastroSerie(props){
                             <input
                                 type="Number"
                                 value={numRepeticoes}
-                                onChange={SalvarRepeticao}
+                                onChange={(event) => {
+                                    setNumRepeticoes(event.target.value);
+                                }}
                             />
                         </div>
                     </div>
@@ -207,6 +231,17 @@ function CadastroSerie(props){
                 
                 </>
             }
+
+            {
+                statusExercicio === 'F' ? <>
+                
+                </> : <>
+                    <button className="" onClick={FinalizarSerie}>
+                        <p>Finalizar Série</p>
+                    </button>
+                </>
+            }
+            
         </div>
             
     </>
