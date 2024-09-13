@@ -7,6 +7,8 @@ import apiWeb from "../../services/apiWeb.js";
 import { CONSTANTES_SERVER } from "../../style/const.js";
 
 function Login(){
+    document.body.style= 'background-color: #00000';
+
 
     const navigate = useNavigate();
     const username = CONSTANTES_SERVER.credentials_username;

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar.jsx";
 
 function Projetos(){
+    document.body.style= 'background-color: #00000';
+
 
     return <>
 

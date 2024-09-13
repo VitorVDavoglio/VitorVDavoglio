@@ -1,6 +1,6 @@
 import "./navbar.css";
 import { Link, useNavigate} from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COLORS, FONT_SIZE } from "../../constants/theme.js";
 
 import ModalPaginas from "../modals/modal_paginas/modal_paginas.jsx";
@@ -30,8 +30,10 @@ function Navbar(props){
       <div class="container-fluid div-navbar-completa">
         {
           props.Interno ? <>
-            <button class="navbar-toggler" type="button" onClick={openModalPaginas}>
-              <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" onClick={openModalPaginas} 
+              style={{backgroundColor: props.fundoBlack ? COLORS.white : null }}
+            >
+              <span class="navbar-toggler-icon" ></span>
             </button>
           </> : <>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +95,9 @@ function Navbar(props){
 
         <div className="div-devdavoglio-mobile">
           <p class="nav-link active" style={{paddingRight: "0px", fontSize: FONT_SIZE.lg, color: COLORS.orange_dev}}>DEV</p>
-          <p class="nav-link active" style={{paddingLeft: "0px", fontSize: FONT_SIZE.lg, color: COLORS.black}}>DAVOGLIO</p>
+          <p class="nav-link active" 
+            style={{paddingLeft: "0px", fontSize: FONT_SIZE.lg, color: props.fundoBlack ? COLORS.white : COLORS.black }}
+          >DAVOGLIO</p>
         </div>
 
         <div className="div-devdavoglio-mobile">

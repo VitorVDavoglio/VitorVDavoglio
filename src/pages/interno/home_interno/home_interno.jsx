@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 function HomeInterno(){
+    document.body.style= 'background-color: #00000';
 
 
     return <>

@@ -7,7 +7,8 @@ import apiWeb from "../../../services/apiWeb.js";
 import { CONSTANTES_SERVER } from "../../../style/const.js";
 
 function Maestro(){
-
+    document.body.style= 'background-color: #00000';
+    
 
     return <>
 

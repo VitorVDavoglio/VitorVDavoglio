@@ -8,8 +8,8 @@ import apiWeb from "../../../../services/apiWeb.js";
 import { CONSTANTES_SERVER } from "../../../../style/const.js";
 
 function CadastroExerc(props){
-
-    document.body.style= 'background-color: #00000';
+    document.body.style.backgroundColor= '#0E1419';
+    document.body.style.color= '#F2F4F7';
 
     const navigate = useNavigate();
     const location = useLocation();

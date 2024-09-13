@@ -23,7 +23,7 @@ function ModalConfirmacao(props){
         <div className="">
 
             <div className="div-titulo-modal-confirmacao">
-                <h4>Deseja criar um novo {props.titulo}?</h4>
+                <h4 style={{color: "black"}}>Deseja criar um novo {props.titulo}?</h4>
             </div>
 
             <div className="div-titulo-modal-confirmacao-botao">

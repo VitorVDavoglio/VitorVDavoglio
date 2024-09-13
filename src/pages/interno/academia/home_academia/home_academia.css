@@ -36,7 +36,6 @@
     margin-right: 30px;
     align-items: center;
     align-self: center;
-    /* width: 90%; */
 }
 .div-treino-separado button{
     display: flex;
@@ -45,6 +44,14 @@
     padding-bottom: 4px;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.div-treino-separado-horarios{
+    display: flex;
+    margin-left: 15px;
+}
+.div-treino-separado-horarios h5{
+    margin-left: 15px;
 }
 
 .div-treino-concluido{

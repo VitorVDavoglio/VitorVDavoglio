@@ -10,7 +10,6 @@ import { CONSTANTES_SERVER } from "../../../../style/const.js";
 import ModalConfirmacao from "../../../../components/modals/modal_confirmacao/modal_confirmacao.jsx";
 
 function HomeAcamedia(props){
-
     document.body.style.backgroundColor= '#0E1419';
     document.body.style.color= '#F2F4F7';
 
@@ -67,7 +66,7 @@ function HomeAcamedia(props){
 
        let dataSeparda = now.getDate();
        let mesSeparda = now.getMonth() + 1;
-       mesSeparda = mesSeparda < 10 ? "0" + mesSeparda : mesSeparda;
+        mesSeparda = mesSeparda < 10 ? "0" + mesSeparda : mesSeparda;
        let anoSeparda = now.getFullYear();
        let horaSeparda = now.getHours();
        let minSeparda = now.getMinutes();
@@ -95,10 +94,36 @@ function HomeAcamedia(props){
         navigate("/academia/cadastro/exercicio", {state:{key_treino: key, data_inicio: data_inicio, data_fim: data_fim}});
     }
 
+    function ArrumarData(data){        
+        const dataCompleta = new Date(data)
+
+        const diaSemana = dataCompleta.getDay()
+        const dia = dataCompleta.getDate();
+        const mes = dataCompleta.getMonth() + 1;
+        const ano = dataCompleta.getFullYear();
+
+        const dataExibir = `${dia}/${mes}/${ano}`
+
+        const diasDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        const diaFeito = diasDaSemana[diaSemana];
+
+        return(`${diaFeito} - ${dataExibir}`);
+    }
+
+    function ArrumarHora(hora){
+        const dataCompleta = new Date(hora);
+
+        const horaSeparada = dataCompleta.getHours();
+        const minSeparada = dataCompleta.getMinutes();
+        return(`${horaSeparada}:${minSeparada}`);
+    }
 
     return <div className="pagina-home-academia">
   
-        <Navbar Interno />
+        <Navbar 
+            Interno 
+            fundoBlack
+        />
 
         <ModalConfirmacao 
             isOpen={isModalConfirmacaoOpen}
@@ -108,7 +133,7 @@ function HomeAcamedia(props){
         />
 
         <div className="container">
-            <h2>Página Academia</h2>
+            <h2>Página Treinos Academia</h2>
 
             <div className="div-treino-ativo">
                 <h2>Treino ativo:</h2>
@@ -117,7 +142,10 @@ function HomeAcamedia(props){
             <div>
                 {treinosAbertos.map(treinos => {
                     return <div className="div-treino-separado">
-                            <h4>Início do treino: {treinos.data_inicio}</h4>
+                            <h4 className="titulo-treino-aberto">Treino: {ArrumarData(treinos.data_inicio)}</h4>
+                            <div className="div-treino-separado-horarios"> 
+                                <h5>Início: {ArrumarHora(treinos.data_inicio)}</h5>
+                            </div>
                             <div>
                                 <p>Grupo Muscular: ex: Dorsal(2)</p>
                             </div>    
@@ -142,8 +170,11 @@ function HomeAcamedia(props){
             <div>
                 {treinosFechados.map(treinos => {
                     return <div className="div-treino-separado">
-                            <h4>Início do treino: {treinos.data_inicio}</h4>
-                            <h4>Início do treino: {treinos.data_fim}</h4>
+                            <h4>Treino: {ArrumarData(treinos.data_inicio)}</h4>
+                            <div className="div-treino-separado-horarios"> 
+                                <h5>Início: {ArrumarHora(treinos.data_inicio)}</h5>
+                                <h5>Fim: {ArrumarHora(treinos.data_fim)}</h5>
+                            </div>
                             <div>
                                 <p>Grupo Muscular: ex: Dorsal(2)</p>
                             </div>    
