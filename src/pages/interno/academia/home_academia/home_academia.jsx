@@ -11,6 +11,9 @@ import ModalConfirmacao from "../../../../components/modals/modal_confirmacao/mo
 
 function HomeAcamedia(props){
 
+    document.body.style.backgroundColor= '#0E1419';
+    document.body.style.color= '#F2F4F7';
+
     const navigate = useNavigate();
     const [treinoIniciado, setTreinoIniciado] = useState(false);
     const [treinosAbertos, setTreinosAbertos] = useState([]);
@@ -88,16 +91,12 @@ function HomeAcamedia(props){
         })
     }
 
-    function CadastrarExercicio(key, data){
-        navigate("/academia/cadastro/exercicio", {state:{acao: 'adicionarExerc',key_treino: key, data: data}});
-    }
-
     function AbrirTreino(key, data_inicio, data_fim){
-        navigate("/academia/cadastro/exercicio", {state:{acao: 'verTreino',key_treino: key, data_inicio: data_inicio, data_fim: data_fim}});
+        navigate("/academia/cadastro/exercicio", {state:{key_treino: key, data_inicio: data_inicio, data_fim: data_fim}});
     }
 
 
-    return <>
+    return <div className="pagina-home-academia">
   
         <Navbar Interno />
 
@@ -119,9 +118,6 @@ function HomeAcamedia(props){
                 {treinosAbertos.map(treinos => {
                     return <div className="div-treino-separado">
                             <h4>Início do treino: {treinos.data_inicio}</h4>
-                            <button className="button-treino-novo-exercicio" onClick={() => CadastrarExercicio(treinos.id_treino, treinos.data_inicio)}>
-                                <p>Adicionar exercício</p>
-                            </button>
                             <div>
                                 <p>Grupo Muscular: ex: Dorsal(2)</p>
                             </div>    
@@ -159,7 +155,7 @@ function HomeAcamedia(props){
             </div>
 
         </div>
-    </>
+    </div>
 }
 
 export default HomeAcamedia;

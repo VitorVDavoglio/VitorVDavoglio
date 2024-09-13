@@ -2,6 +2,7 @@ const COLORS ={
     gray: "#F3F3F3",
     white: "#FFFFFF",
     black: "#000000",
+    black_whats: "0E1419",
     bright_red : "#EE4B2B",
     orange_dev : "#FF7F00",
 }

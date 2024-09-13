@@ -1,8 +1,7 @@
+
 .button-cadastro-adicionar-exerc{
     margin-top: 100px;
 }
-
-
 
 .div-cadastro-exerc-feitos-series{
     background-color: #6996FA;
@@ -17,4 +16,8 @@
 .p-div-cadastro-exerc-feitos-series{
     margin: 15px;
     color: white;
+}
+
+.div-cadastro-exercico-status-fim-treino{
+    display: flex;
 }

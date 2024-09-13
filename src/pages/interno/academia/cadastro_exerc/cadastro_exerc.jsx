@@ -9,6 +9,8 @@ import { CONSTANTES_SERVER } from "../../../../style/const.js";
 
 function CadastroExerc(props){
 
+    document.body.style= 'background-color: #00000';
+
     const navigate = useNavigate();
     const location = useLocation();
     const [keyTreino, setKeyTreino] = useState("");
@@ -23,11 +25,11 @@ function CadastroExerc(props){
     const [exerciciosFeitos, setExerciciosFeitos] = useState([]);
 
     useEffect(() => {
+        setAcaoPagina('');
         if(location.state){
             setKeyTreino(location.state.key_treino);
             setDataInicioTreino(location.state.data_inicio);
             setDataFimTreino(location.state.data_fim);
-            setAcaoPagina(location.state.acao);
         }
         BuscarExercicios();
     }, []);
@@ -81,7 +83,8 @@ function CadastroExerc(props){
             console.log(resp);
             if(resp.request.status === 200){
                 setMensagemServidor('Exercício criado com sucesso');
-                navigate("/academia/cadastro/exercicio", {state:{key_treino: keyTreino}})
+                BuscarExercicios();
+                // navigate("/academia/cadastro/exercicio", {state:{key_treino: keyTreino}})
             }
         })
         .catch(err => {
@@ -129,8 +132,19 @@ function CadastroExerc(props){
             <h2>Treino de ...Seg...</h2>
 
             <p>Início = {dataInicioTreino}</p>
-
-            <p>Status - Fim = {dataFimTreino}</p>
+            
+            <div className="div-cadastro-exercico-status-fim-treino">
+                <p> Treino</p>
+                    
+                    {   dataFimTreino ? <>
+                            Finalizado em {dataFimTreino}
+                        </> : <>
+                            <p> em aberto</p> 
+                        </>
+                    
+                    }
+                
+            </div>
 
             <div className="">
                 <h4>Exercícios Feitos</h4>
@@ -184,7 +198,6 @@ function CadastroExerc(props){
                                 })
                             }
                         </select>
-                        <p>{idGrupoMuscularEscolhido}</p>
                     </div>
 
                     <div className="">
@@ -197,7 +210,6 @@ function CadastroExerc(props){
                                 })
                             }
                         </select>
-                        <p>{idGrupoExercicioEscolhido}</p>
                     </div>
 
                     <div className="">

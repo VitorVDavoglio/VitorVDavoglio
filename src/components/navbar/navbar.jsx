@@ -99,7 +99,7 @@ function Navbar(props){
         <div className="div-devdavoglio-mobile">
           {
             props.Interno ? <>
-              <button class="btn btn-outline-success" type="submit" onClick={() => {navigate('/')}}>Sair</button>
+              <button class="btn btn-outline-danger" type="submit" onClick={() => {navigate('/')}}>Sair</button>
             </> : <>
               <button class="btn btn-outline-success" type="submit" onClick={() => {navigate('/login')}}>Entrar</button>
             </>
